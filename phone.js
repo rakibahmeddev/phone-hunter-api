@@ -41,6 +41,7 @@ const displayPhones = (phones, dataLimit) => {
                 Some quick example text to build on the card title and make up
                 the bulk of the card's content.
             </p>
+            <button onclick="loadPhoneDetails('${phone.slug}')" class="btn btn-primary">Show Details</button>
         </div>
     </div>
     `;
@@ -61,8 +62,18 @@ const proessSearch = (dataLimit) => {
 
 // handle search box
 document.getElementById("btn-search").addEventListener("click", function () {
-  proessSearch(10);
+  proessSearch(12);
 });
+
+// search input field enter key handler
+document
+  .getElementById("search-field")
+  .addEventListener("keypress", function (e) {
+    console.log(e.key);
+    if (e.key === "Enter") {
+      proessSearch(12);
+    }
+  });
 
 // spinner
 const toggleSpinner = (isLoading) => {
@@ -78,5 +89,13 @@ const toggleSpinner = (isLoading) => {
 document.getElementById("btn-show-all").addEventListener("click", function () {
   proessSearch();
 });
+
+const loadPhoneDetails = (id) => {
+  const url = `https://openapi.programming-hero.com/api/phone/${id}`;
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => console.log(data.data));
+};
 
 // loadPhones();
