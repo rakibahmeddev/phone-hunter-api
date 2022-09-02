@@ -10,6 +10,19 @@ const displayPhones = (phones) => {
   console.log(phones);
   const phonesContainer = document.getElementById("phones-container");
   phonesContainer.innerText = "";
+
+  // display 20 phones
+  phones = phones.slice(0, 12);
+
+  // display no phone found message
+  const phoneNotFound = document.getElementById("phone-not-found");
+  if (phones.length === 0) {
+    phoneNotFound.classList.remove("d-none");
+  } else {
+    phoneNotFound.classList.add("d-none");
+  }
+
+  // display all phones
   phones.forEach((phone) => {
     const phoneDiv = document.createElement("div");
     phoneDiv.classList.add("col");
@@ -35,4 +48,4 @@ document.getElementById("btn-search").addEventListener("click", function () {
   loadPhones(searchText);
 });
 
-loadPhones();
+// loadPhones();
