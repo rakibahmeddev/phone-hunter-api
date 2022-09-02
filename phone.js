@@ -41,7 +41,8 @@ const displayPhones = (phones, dataLimit) => {
                 Some quick example text to build on the card title and make up
                 the bulk of the card's content.
             </p>
-            <button onclick="loadPhoneDetails('${phone.slug}')" class="btn btn-primary">Show Details</button>
+            <button onclick="loadPhoneDetails('${phone.slug}')" class="btn btn-primary" data-toggle="modal"
+            data-target="#phoneDetailsModal">Show Details</button>
         </div>
     </div>
     `;
@@ -95,7 +96,56 @@ const loadPhoneDetails = (id) => {
 
   fetch(url)
     .then((res) => res.json())
-    .then((data) => console.log(data.data));
+    .then((data) => displayPhoneDetails(data.data));
 };
 
-// loadPhones();
+const displayPhoneDetails = (phone) => {
+  console.log(phone);
+  const phoneModalContent = document.getElementById("phone-modal-content");
+  phoneModalContent.innerHTML = `
+  <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="phoneDetailsModalLabel">
+                 ${phone.name}
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body text-center">
+              <img class="image-fluid" src=${phone.image} />
+                <p>Release Date: ${
+                  phone.releaseDate
+                    ? phone.releaseDate
+                    : "No release date found"
+                }</p>  
+                <p>Cheapset: ${
+                  phone.mainFeatures.chipSet
+                    ? phone.mainFeatures.chipSet
+                    : "No cheapset found"
+                }</p>  
+                <p>Display: ${
+                  phone.mainFeatures.displaySize
+                    ? phone.mainFeatures.displaySize
+                    : "No display information found"
+                }</p>  
+                <p>Memory: ${
+                  phone.mainFeatures.memory
+                    ? phone.mainFeatures.memory
+                    : "No memory information found"
+                }</p>  
+                  
+              </div>
+              
+            </div>
+          </div>
+  `;
+};
+
+loadPhones("apple");
