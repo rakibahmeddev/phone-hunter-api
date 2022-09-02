@@ -1,18 +1,24 @@
-const loadPhones = (searchText) => {
+const loadPhones = (searchText, dataLimit) => {
   const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
 
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displayPhones(data.data));
+    .then((data) => displayPhones(data.data, dataLimit));
 };
 
-const displayPhones = (phones) => {
+const displayPhones = (phones, dataLimit) => {
   console.log(phones);
   const phonesContainer = document.getElementById("phones-container");
   phonesContainer.innerText = "";
 
   // display 20 phones
-  phones = phones.slice(0, 12);
+  const showAll = document.getElementById("show-all");
+  if (dataLimit && phones.length > 12) {
+    phones = phones.slice(0, 12);
+    showAll.classList.remove("d-none");
+  } else {
+    showAll.classList.add("d-block");
+  }
 
   // display no phone found message
   const phoneNotFound = document.getElementById("phone-not-found");
@@ -45,12 +51,17 @@ const displayPhones = (phones) => {
   toggleSpinner(false);
 };
 
-document.getElementById("btn-search").addEventListener("click", function () {
+const proessSearch = (dataLimit) => {
   // start spinner
   toggleSpinner(true);
   const searchField = document.getElementById("search-field");
   const searchText = searchField.value;
-  loadPhones(searchText);
+  loadPhones(searchText, dataLimit);
+};
+
+// handle search box
+document.getElementById("btn-search").addEventListener("click", function () {
+  proessSearch(10);
 });
 
 // spinner
@@ -62,5 +73,10 @@ const toggleSpinner = (isLoading) => {
     spinner.classList.add("d-none");
   }
 };
+
+// not the best solution to show all products
+document.getElementById("btn-show-all").addEventListener("click", function () {
+  proessSearch();
+});
 
 // loadPhones();
